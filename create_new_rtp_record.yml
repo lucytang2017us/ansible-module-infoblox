@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: get network reference
+      infoblox:
+        server=192.168.1.1
+        username=admin
+        password=admin
+        action=get_network
+        network=10.1.212.0/24
+      register: infoblox
+
+    - name: get next available ips
+      infoblox:
+        server=192.168.1.1
+        username=admin
+        password=admin
+        action=get_next_available_ip
+        network=10.1.212.0/24
+        start_addr=10.1.212.100
+        end_addr=10.1.212.120 
+      register: infoblox
