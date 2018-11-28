@@ -22,7 +22,7 @@
         network: "{{ virtual_network }}"
       register: network_ref
 
-    - name: Get next available ips
+    - name: Get next available ip
       infoblox:
         provider: "{{ provider }}"
         action: "get_next_available_ip"
