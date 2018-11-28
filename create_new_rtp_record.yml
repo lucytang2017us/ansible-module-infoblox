@@ -3,23 +3,37 @@
   connection: local
   gather_facts: False
 
+  vars_files:
+    - "../files/https_app_onboard_vars.yml"
+    
   tasks:
+  
+    - name: Setup provider
+      set_fact:
+        provider:
+          server: "{{ inventory_hostname }}"
+          username: "{{ infoblox_username }}"
+          password: "{{ infoblox_password }}"
+        
     - name: get network reference
       infoblox:
-        server=192.168.1.1
-        username=admin
-        password=admin
+        provider: "{{ provider }}"
         action=get_network
         network=10.1.212.0/24
       register: infoblox
 
     - name: get next available ips
       infoblox:
-        server=192.168.1.1
-        username=admin
-        password=admin
+        provider: "{{ provider }}"
         action=get_next_available_ip
         network=10.1.212.0/24
         start_addr=10.1.212.100
         end_addr=10.1.212.120 
+      register: infoblox
+      
+    - name: create rtp for the ip
+      infoblox:
+        provider: "{{ provider }}"
+        action=get_network
+        network=10.1.212.0/24
       register: infoblox
