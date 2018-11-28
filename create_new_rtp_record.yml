@@ -18,20 +18,20 @@
     - name: get network reference
       infoblox:
         provider: "{{ provider }}"
-        action=get_network
-        network=10.1.212.0/24
+        action: "get_network"
+        network: "{{ virtual_network }}"
       register: infoblox
 
     - name: get next available ips
       infoblox:
         provider: "{{ provider }}"
-        action=get_next_available_ip
-        network=10.1.212.0/24
-        start_addr=10.1.212.100
-        end_addr=10.1.212.120 
+        action: "get_next_available_ip"
+        network: "{{ virtual_network }}"
+        start_addr: "{{ start_address }}"
+        end_addr: "{{ end_address }}" 
       register: infoblox
       
-    - name: create rtp for the ip
+    - name: create rtp for the retrieve ip
       infoblox:
         provider: "{{ provider }}"
         action=get_network
