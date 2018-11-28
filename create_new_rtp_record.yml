@@ -15,25 +15,33 @@
           username: "{{ infoblox_username }}"
           password: "{{ infoblox_password }}"
         
-    - name: get network reference
+    - name: Get network reference
       infoblox:
         provider: "{{ provider }}"
         action: "get_network"
         network: "{{ virtual_network }}"
-      register: infoblox
+      register: network_ref
 
-    - name: get next available ips
+    - name: Get next available ips
       infoblox:
         provider: "{{ provider }}"
         action: "get_next_available_ip"
         network: "{{ virtual_network }}"
         start_addr: "{{ start_address }}"
         end_addr: "{{ end_address }}" 
-      register: infoblox
+      register: next_avail_addr.ip
       
-    - name: create rtp for the retrieve ip
+    - name: Create ptr for the available ip
       infoblox:
         provider: "{{ provider }}"
-        action=get_network
-        network=10.1.212.0/24
-      register: infoblox
+        action: "create_ptr_record"
+        name: "{{ application_name }}"
+        address: next_avail_addr.ip
+        comment: "{{ ptr_comment }}"
+      
+    - name: Get ptr for the available ip
+      infoblox:
+        provider: "{{ provider }}"
+        action: "get_ptr_record"
+        address: next_avail_addr.ip
+
